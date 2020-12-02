@@ -1,5 +1,5 @@
-import * as day1prob1 from './day1.1';
-import * as day2prob2 from './day1.2';
+import * as day1prob1 from './src/day1.1';
+import * as day2prob2 from './src/day1.2';
 
 
 //const answerday1 = day1prob.answer()
