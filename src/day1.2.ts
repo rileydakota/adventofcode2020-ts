@@ -13,7 +13,7 @@ let session = process.env.github_session
 //     return result
 //     }
 
-export function convertToNum(input:any) {
+function convertToNum(input:any) {
     let array : string = input.data
     let stringArray: string[] = array.split('\n')
     let numArray : number[] = stringArray.map(Number)
