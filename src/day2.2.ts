@@ -1,8 +1,6 @@
-//import { ParsePolicy, ParsePasswords } from './day2.1'
 import axios, { AxiosResponse } from 'axios'
 import { exception } from 'console';
 
-//const inputUrl = 'https://webhook.site/01dab2df-2367-403a-8c8a-85a6d6cc7d08'
 const inputUrl = 'https://adventofcode.com/2020/day/2/input'
 let session = process.env.github_session
 
@@ -34,18 +32,18 @@ interface ComplianceObject {
 
 
 export function ParsePolicy(line: string): CorporatePasswordEvalObject {
-    //const minVal, maxVal, policyChar, Password = string.split()
+
     const splitString = line.split(' ');
     const splitVals = splitString[0].split('-')
     const splitNums = splitVals.map(Number)
-    //splitVals.localeCompare(Number)
+
 
     let truncPolicyChar = splitString[1]
-    //truncPolicyChar = truncPolicyChar.substring(0, truncPolicyChar.length - 1);
+
 
     const firstPos = splitNums[0]
     const lastPos = splitNums[1]
-    const policyChar: string = truncPolicyChar//.substring(0, splitString[1].length -1)
+    const policyChar: string = truncPolicyChar
     const password: string = splitString[2]
     const result : CorporatePasswordEvalObject = {
         PolicyChar: policyChar,
@@ -53,7 +51,7 @@ export function ParsePolicy(line: string): CorporatePasswordEvalObject {
         LastPos: lastPos,
         Password: password
     }
-    //result.PolicyChar.substring(0, result.PolicyChar.length -1);
+
     return result
 }
 
@@ -71,8 +69,7 @@ export function ParsePasswords(body:AxiosResponse): Array<CorporatePasswordEvalO
         else {CorporatePasswordPolicyArray.push(object)}
 
     }
-    //console.log(CorporatePasswordPolicyArray)
-    //CorporatePasswordPolicyArray.pop()
+
 
 
     return CorporatePasswordPolicyArray
@@ -85,13 +82,12 @@ export function ParsePasswords(body:AxiosResponse): Array<CorporatePasswordEvalO
 function EvalCompliance(target: CorporatePasswordEvalObject): ComplianceObject {
     const char = target.PolicyChar.substring(0, target.PolicyChar.length -1);
 
-    //console.log(char)
     const passwordCharArray = target.Password.split('')
     
     //substract 1 from Position values because computer science
     const firstPos = target.FirstPos -1
     const LastPos = target.LastPos -1
-    //console.log(firstPos, LastPos)
+
     //non-compliant - both match
     if (passwordCharArray[firstPos] == char && passwordCharArray[LastPos] == char) {
        const returnObj: ComplianceObject = {
@@ -103,7 +99,6 @@ function EvalCompliance(target: CorporatePasswordEvalObject): ComplianceObject {
     }
 
     //non-compliant - neither match
-    //console.log(passwordCharArray[firstPos], )
     if (passwordCharArray[firstPos] != char && passwordCharArray[LastPos] != char) {
         const returnObj: ComplianceObject = {
             Compliant: false,
@@ -124,7 +119,7 @@ function EvalCompliance(target: CorporatePasswordEvalObject): ComplianceObject {
     }
     
     //compliant - last position matches
-    else { //(passwordCharArray[target.FirstPos] === target.PolicyChar) {
+    else {
         const returnObj: ComplianceObject = {
             Compliant: true,
             Detail: PasswordStatus.comp_exists_in_last,
@@ -137,20 +132,13 @@ function EvalCompliance(target: CorporatePasswordEvalObject): ComplianceObject {
 
     export async function answer(){
         const input = await axios.get(inputUrl, {headers: {cookie:'session='+session}, withCredentials: true})
-        //console.log(input.data)
         let ParsedPasswords = ParsePasswords(input)
-        //ParsedPasswords = ParsedPasswords[0-10]
         let nonComplianceCount: number = 0
-        //for (let x in ParsedPasswords) {
         ParsedPasswords.forEach(function(value){
             const complianceResult = EvalCompliance(value)
-            //console.log(complianceResult)
             if (complianceResult.Compliant === true){
-                //console.log(complianceResult)
                 nonComplianceCount++
             }
         })
-        //console.log('Number of non-compliant passwords: ' + nonComplianceCount)
         return nonComplianceCount    
-        //}
     }
